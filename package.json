@@ -1,0 +1,52 @@
+{
+  "name": "freno",
+  "type": "module",
+  "description": "use to quickly create project related constraints configuration",
+  "author": "Adrian Zephyr Liao <liaowenrun@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/Adrian-Zephyr-Liao/freno",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Adrian-Zephyr-Liao/freno.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Adrian-Zephyr-Liao/freno/issues"
+  },
+  "scripts": {
+    "build": "unbuild",
+    "prepack": "unbuild",
+    "prepare": "husky"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/templates"
+  ],
+  "bin": {
+    "freno": "./dist/index.mjs"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "commander": "^14.0.2",
+    "handlebars": "^4.7.8",
+    "inquirer": "^12.10.0",
+    "latest-version": "^7.0.0",
+    "which-pm-runs": "^1.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@types/handlebars": "^4.1.0",
+    "@types/inquirer": "^9.0.9",
+    "@types/node": "^24.9.2",
+    "husky": "^9.1.7",
+    "unbuild": "^3.6.1"
+  }
+}
