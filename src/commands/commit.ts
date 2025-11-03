@@ -30,11 +30,7 @@ async function generateConfigFiles(
   targetDir: string,
   config: CommitConfig
 ): Promise<void> {
-  // 检测项目模块类型
   const moduleType = await detectModuleType(targetDir);
-  
-  // 根据模块类型生成不同的配置文件
-  // ES Module 项目使用 .cjs 扩展名，CommonJS 使用 .js
   const configFileName = moduleType === 'esm' 
     ? 'commitlint.config.cjs' 
     : 'commitlint.config.js';
@@ -47,9 +43,6 @@ async function generateConfigFiles(
   );
   console.log(chalk.green(`✓ 已创建 ${configFileName}`));
 
-  // 如果使用 Commitizen，生成配置文件
-  // 使用 .cjs 扩展名以避免 ES Module 冲突
-  // 根据 cz-customizable 文档，可以在 package.json 中指定配置文件路径
   if (config.useCommitizen) {
     const czConfigPath = join(targetDir, '.cz-config.cjs');
     await writeFile(
@@ -60,15 +53,12 @@ async function generateConfigFiles(
     console.log(chalk.green('✓ 已创建 .cz-config.cjs'));
   }
 
-  // 更新 package.json（先更新，以便依赖已添加）
   await updateTargetPackageJson(targetDir, config);
 
-  // 如果使用 husky，初始化 husky 并创建 hook
   if (config.useHusky) {
     await initHusky(targetDir, config);
   }
 
-  // 如果使用 Commitizen，进行配置提示
   if (config.useCommitizen) {
     await setupCommitizen(targetDir);
   }

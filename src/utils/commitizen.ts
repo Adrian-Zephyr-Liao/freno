@@ -28,16 +28,16 @@ export async function setupCommitizen(targetDir: string): Promise<void> {
       chalk.yellow('\n💡 工作流程:')
     );
     console.log(
-      chalk.white('  1. 运行 npx cz 启动交互式提交流程')
+      chalk.white('  1. 运行 npm run cz 启动交互式提交流程')
     );
     console.log(
-      chalk.white('  2. 选择 emoji 和对应的 type')
+      chalk.white('  2. 选择 type（会自动匹配对应的 emoji）')
     );
     console.log(
       chalk.white('  3. 输入提交描述')
     );
     console.log(
-      chalk.white('  4. Commitizen 会自动生成符合规范的提交信息')
+      chalk.white('  4. Git hook 会自动添加 emoji 前缀')
     );
     console.log(
       chalk.white('  5. commitlint 会验证提交信息格式')

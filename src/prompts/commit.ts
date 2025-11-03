@@ -174,7 +174,6 @@ export async function collectCommitConfig(): Promise<CommitConfig> {
   return {
     emojiMappings,
     useHusky,
-    useGitmojiCli: false, // 移除 gitmoji-cli 支持
     useCommitizen,
   };
 }
