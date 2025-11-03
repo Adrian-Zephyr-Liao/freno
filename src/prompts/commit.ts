@@ -132,6 +132,15 @@ export async function collectCommitConfig(): Promise<CommitConfig> {
     },
   ]);
 
+  const { useCommitizen } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'useCommitizen',
+      message: '是否安装 Commitizen (cz-customizable) 作为提交助手?',
+      default: true,
+    },
+  ]);
+
   const { useDefaultEmoji } = await inquirer.prompt([
     {
       type: 'confirm',
@@ -165,6 +174,8 @@ export async function collectCommitConfig(): Promise<CommitConfig> {
   return {
     emojiMappings,
     useHusky,
+    useGitmojiCli: false, // 移除 gitmoji-cli 支持
+    useCommitizen,
   };
 }
 

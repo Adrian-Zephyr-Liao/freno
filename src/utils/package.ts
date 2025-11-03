@@ -95,6 +95,13 @@ export async function updateTargetPackageJson(
       packageJson.devDependencies['husky'] = huskyVersion;
     }
 
+    if (config.useCommitizen) {
+      const commitizenVersion = await getLatestVersion('commitizen');
+      const czCustomizableVersion = await getLatestVersion('cz-customizable');
+      packageJson.devDependencies['commitizen'] = commitizenVersion;
+      packageJson.devDependencies['cz-customizable'] = czCustomizableVersion;
+    }
+
     // 添加 scripts
     if (!packageJson.scripts) {
       packageJson.scripts = {};
@@ -102,6 +109,24 @@ export async function updateTargetPackageJson(
 
     if (config.useHusky) {
       packageJson.scripts['prepare'] = 'husky';
+    }
+
+    if (config.useCommitizen) {
+      // 配置 commitizen 使用 cz-customizable
+      if (!packageJson.config) {
+        packageJson.config = {};
+      }
+      packageJson.config.commitizen = {
+        path: './node_modules/cz-customizable',
+      };
+      // 明确指定 cz-customizable 配置文件路径（根据文档）
+      // 使用 .cjs 扩展名以避免 ES Module 冲突
+      packageJson.config['cz-customizable'] = {
+        config: '.cz-config.cjs',
+      };
+      // 添加 cz 脚本别名
+      packageJson.scripts['cz'] = 'cz';
+      packageJson.scripts['commit'] = 'cz';
     }
 
     await writeFile(

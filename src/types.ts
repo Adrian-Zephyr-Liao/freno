@@ -6,5 +6,7 @@ export interface EmojiMapping {
 export interface CommitConfig {
   emojiMappings: EmojiMapping[];
   useHusky: boolean;
+  useGitmojiCli: boolean;
+  useCommitizen: boolean;
 }
 

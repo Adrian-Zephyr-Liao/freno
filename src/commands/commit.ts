@@ -5,8 +5,10 @@ import chalk from 'chalk';
 import type { CommitConfig } from '../types.js';
 import { collectCommitConfig } from '../prompts/commit.js';
 import { generateCommitlintConfig } from '../generators/commitlint.js';
+import { generateCzConfig } from '../generators/cz-config.js';
 import { updateTargetPackageJson } from '../utils/package.js';
 import { initHusky } from '../utils/husky.js';
+import { setupCommitizen } from '../utils/commitizen.js';
 
 // 检测项目的模块类型
 async function detectModuleType(targetDir: string): Promise<'esm' | 'cjs'> {
@@ -45,12 +47,30 @@ async function generateConfigFiles(
   );
   console.log(chalk.green(`✓ 已创建 ${configFileName}`));
 
-  // 更新 package.json（先更新，以便 husky 依赖已添加）
+  // 如果使用 Commitizen，生成配置文件
+  // 使用 .cjs 扩展名以避免 ES Module 冲突
+  // 根据 cz-customizable 文档，可以在 package.json 中指定配置文件路径
+  if (config.useCommitizen) {
+    const czConfigPath = join(targetDir, '.cz-config.cjs');
+    await writeFile(
+      czConfigPath,
+      generateCzConfig(config),
+      'utf-8'
+    );
+    console.log(chalk.green('✓ 已创建 .cz-config.cjs'));
+  }
+
+  // 更新 package.json（先更新，以便依赖已添加）
   await updateTargetPackageJson(targetDir, config);
 
   // 如果使用 husky，初始化 husky 并创建 hook
   if (config.useHusky) {
-    await initHusky(targetDir);
+    await initHusky(targetDir, config);
+  }
+
+  // 如果使用 Commitizen，进行配置提示
+  if (config.useCommitizen) {
+    await setupCommitizen(targetDir);
   }
 }
 
